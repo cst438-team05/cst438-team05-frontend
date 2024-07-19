@@ -19,7 +19,7 @@ export const AdminLayout = () => {
         <Link to="/">Home</Link> &nbsp;|&nbsp;   
         <Link to="/users">Users</Link>&nbsp;|&nbsp;  
         <Link to="/courses">Courses</Link>&nbsp;|&nbsp;  
-        <Link to="/sections">Sections</Link>
+        <Link to="/sections" id="sections">Sections</Link>
       </nav>
 
       <Outlet />

@@ -68,27 +68,27 @@ const SectionAdd = (props)  => {
 
 
     return (
-        <div>
-        <Button id="addSection" onClick={editOpen}>Add Section</Button>
-        <Dialog open={open} >
-            <DialogTitle>Add Section</DialogTitle>
-            <DialogContent  style={{paddingTop: 20}} >
-                <h4 id="addMessage">{editMessage}</h4>
-                <TextField id="ecourseId" style={{padding:10}} autoFocus fullWidth label="courseId" name="courseId" value={section.courseId} onChange={editChange}  /> 
-                <TextField id="esecId" style={{padding:10}} fullWidth label="secId" name="secId" value={section.secId} onChange={editChange}  /> 
-                <TextField id="eyear" style={{padding:10}} fullWidth label="year" name="year" value={section.year} onChange={editChange}  /> 
-                <TextField id="esemester" style={{padding:10}} fullWidth label="semester" name="semester" value={section.semester} onChange={editChange}  /> 
-                <TextField id="ebuilding" style={{padding:10}} fullWidth label="building" name="building" value={section.building} onChange={editChange}  /> 
-                <TextField id="eroom" style={{padding:10}} fullWidth label="room" name="room" value={section.room} onChange={editChange}  /> 
-                <TextField id="etimes" style={{padding:10}} fullWidth label="times" name="times" value={section.times} onChange={editChange}  /> 
-                <TextField id="einstructorEmail" style={{padding:10}} fullWidth label="instructorEmail" name="instructorEmail" value={section.instructorEmail} onChange={editChange}  /> 
-            </DialogContent>
-            <DialogActions>
-                <Button id="close" color="secondary" onClick={editClose}>Close</Button>
-                <Button id="save" color="primary" onClick={onSave}>Save</Button>
-            </DialogActions>
-        </Dialog> 
-        </div>                       
+      <div>
+      <Button id="addSection" onClick={editOpen}>Add Section</Button>
+      <Dialog open={open} >
+          <DialogTitle>Add Section</DialogTitle>
+          <DialogContent  style={{paddingTop: 20}} >
+              <h4 id="addMessage">{editMessage}</h4>
+              <TextField id="ecourseId" style={{padding:10}} autoFocus fullWidth label="courseId" name="courseId" value={section.courseId} onChange={editChange}  /> 
+              <TextField id="esecId" style={{padding:10}} fullWidth label="secId" name="secId" value={section.secId} onChange={editChange}  /> 
+              <TextField id="eyear" style={{padding:10}} fullWidth label="year" name="year" value={section.year} onChange={editChange}  /> 
+              <TextField id="esemester" style={{padding:10}} fullWidth label="semester" name="semester" value={section.semester} onChange={editChange}  /> 
+              <TextField id="ebuilding" style={{padding:10}} fullWidth label="building" name="building" value={section.building} onChange={editChange}  /> 
+              <TextField id="eroom" style={{padding:10}} fullWidth label="room" name="room" value={section.room} onChange={editChange}  /> 
+              <TextField id="etimes" style={{padding:10}} fullWidth label="times" name="times" value={section.times} onChange={editChange}  /> 
+              <TextField id="einstructorEmail" style={{padding:10}} fullWidth label="instructorEmail" name="instructorEmail" value={section.instructorEmail} onChange={editChange}  /> 
+          </DialogContent>
+          <DialogActions>
+              <Button id="close" color="secondary" onClick={editClose}>Close</Button>
+              <Button id="save" color="primary" onClick={onSave}>Save</Button>
+          </DialogActions>
+      </Dialog> 
+      </div>                        
     )
 }
 

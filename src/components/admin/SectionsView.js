@@ -101,7 +101,7 @@ function SectionsView(props) {
                 </tbody>
             </table>
             <br/>
-            <button type="submit" id="search" onClick={fetchSections} >Search for Sections</button>
+            <button id="search" type="submit" onClick={fetchSections} >Search for Sections</button>
             <br/>
             <br/>
             <table className="Center" > 
