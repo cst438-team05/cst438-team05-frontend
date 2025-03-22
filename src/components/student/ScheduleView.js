@@ -41,21 +41,6 @@ const ScheduleView = (props) => {
 
     const dropCourse = async (enrollmentId) => {
         try {
-
-            //handling the grade constraint
-            const gradeResponse = await fetch(`${SERVER_URL}/enrollments/${enrollmentId}`);
-            if (!gradeResponse.ok) {
-                // If fetching grades failed, show the error
-                const errorData = await gradeResponse.json();
-                setMessage("Error fetching grades: " + errorData.message);
-                return;
-            }
-            const gradeData = await gradeResponse.json();
-            if (gradeData.length > 0) {
-                setMessage("Cannot delete enrollment. Grades exist for this enrollment.");
-                return;
-            }
-
             const response = await fetch (`${SERVER_URL}/enrollments/${enrollmentId}`,
                 {
                     method: 'DELETE',
