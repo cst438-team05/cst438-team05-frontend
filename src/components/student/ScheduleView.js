@@ -16,6 +16,7 @@ const ScheduleView = (props) => {
     const [schedules, setSchedules] = useState([]);
     const [year, setYear] = useState('');
     const [semester, setSemester] = useState('');
+    const [assignment, setAssignment] = useState('');
     const [message, setMessage] = useState('');
 
     const fetchSchedules = async () => {
@@ -41,6 +42,7 @@ const ScheduleView = (props) => {
 
     const dropCourse = async (enrollmentId) => {
         try {
+            // delete the enrollment
             const response = await fetch (`${SERVER_URL}/enrollments/${enrollmentId}`,
                 {
                     method: 'DELETE',
