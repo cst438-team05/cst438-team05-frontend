@@ -16,7 +16,6 @@ const ScheduleView = (props) => {
     const [schedules, setSchedules] = useState([]);
     const [year, setYear] = useState('');
     const [semester, setSemester] = useState('');
-    const [assignment, setAssignment] = useState('');
     const [message, setMessage] = useState('');
 
     const fetchSchedules = async () => {
@@ -28,7 +27,6 @@ const ScheduleView = (props) => {
             const response = await fetch(`${SERVER_URL}/enrollments?studentId=3&year=${year}&semester=${semester}`);
             if (response.ok) {
                 const data = await  response.json();
-                console.log("Fetched data:", data);
                 setSchedules(data);
                 setMessage('');
             } else {
@@ -104,7 +102,7 @@ const ScheduleView = (props) => {
                         <td>{s.secId}</td>
                         <td>{s.title}</td>
                         <td>{s.credits}</td>
-                        <td><Button onClick = {() => dropCourse(s.enrollmentId)}> Delete </Button> </td>
+                        <td><Button onClick = {() => dropCourse(s.enrollmentId)}> Drop Course </Button> </td>
                     </tr>
                     ))}
                 </tbody>
