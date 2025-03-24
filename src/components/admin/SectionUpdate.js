@@ -13,7 +13,7 @@ const SectionUpdate = (props)  => {
     const [editMessage, setEditMessage] = useState('');
     const [section, setSection] = useState(
         {secNo:'', courseId:'', secId:'', year:'', semester:'', building:'', room:'', times:'',
-        instructorName:'', instructorEmail:''});
+        instructorName:'', instructorEmail:'', startDate:'', endDate:''});
 
     /*
      *  dialog for edit section
@@ -21,7 +21,7 @@ const SectionUpdate = (props)  => {
     const editOpen = () => {
         setEditMessage('');
         setSection({secNo:'', courseId:'', secId:'', year:'', semester:'', building:'', room:'', times:'',
-        instructorName:'', instructorEmail:''});
+        instructorName:'', instructorEmail:'', startDate:'', endDate:''});
         setOpen(true);
         setSection(props.section);
     };
@@ -36,7 +36,13 @@ const SectionUpdate = (props)  => {
     }
 
     const onSave = () => {
-        saveSection(section);
+        if (!section.startDate || !section.endDate) {
+            setEditMessage('Must enter both start and end dates');
+        } else if (new Date(section.startDate) >= new Date(section.endDate)) {
+            setEditMessage('End date must be after start date');
+        } else {
+            saveSection(section);
+        }
     }
 
     const saveSection = async (section) => {
@@ -77,6 +83,30 @@ const SectionUpdate = (props)  => {
                 <TextField style={{padding:10}} fullWidth label="room" name="room" value={section.room} onChange={editChange}  /> 
                 <TextField style={{padding:10}} fullWidth label="times" name="times" value={section.times} onChange={editChange}  /> 
                 <TextField style={{padding:10}} fullWidth label="instructorEmail" name="instructorEmail" value={section.instructorEmail} onChange={editChange}  />
+                <TextField
+                    style={{padding:10}}
+                    fullWidth
+                    label="Start Date"
+                    name="startDate"
+                    type="date"
+                    value={section.startDate}
+                    onChange={editChange}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                />
+                <TextField
+                    style={{padding:10}}
+                    fullWidth
+                    label="End Date"
+                    name="endDate"
+                    type="date"
+                    value={section.endDate}
+                    onChange={editChange}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                />
             </DialogContent>
             <DialogActions>
                 <Button color="secondary" onClick={editClose}>Close</Button>

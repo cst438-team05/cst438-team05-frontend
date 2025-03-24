@@ -17,12 +17,16 @@ const INSTRUCTOR_EMAIL = 'dwisneski@csumb.edu';
 const InstructorSectionsView = (props) => {
   // get year and semester from location state
   const location = useLocation();
-  const { year, semester } = location.state;
+  const { year, semester } = location.state || { year: '', semester: '' };
 
   const [sections, setSections] = useState([]);
   const [message, setMessage] = useState('');
 
   const fetchSections = async (year, semester) => {
+    if (!year || !semester) {
+      setMessage('Please provide both year and semester');
+      return;
+    }
     try {
       const response = await fetch(
         `${SERVER_URL}/sections?email=${INSTRUCTOR_EMAIL}&year=${year}&semester=${semester}`,
@@ -33,10 +37,10 @@ const InstructorSectionsView = (props) => {
         setMessage('');
       } else {
         const json = await response.json();
-        setMessage('response error: ' + json.message);
+        setMessage('Response error: ' + json.message);
       }
     } catch (err) {
-      setMessage('network error: ' + err);
+      setMessage('Network error: ' + err);
     }
   };
 
@@ -47,7 +51,7 @@ const InstructorSectionsView = (props) => {
   return (
     <>
       <h3>Sections</h3>
-      <h4>{message}</h4>
+      {message && <h4>{message}</h4>}
       <table className="Center">
         <thead>
           <tr>
@@ -62,21 +66,27 @@ const InstructorSectionsView = (props) => {
           </tr>
         </thead>
         <tbody>
-          {sections.map((s) => (
-            <tr key={s.secNo}>
-              <td>{s.secNo}</td>
-              <td>{s.courseId}</td>
-              <td>{s.secId}</td>
-              <td>{s.building}</td>
-              <td>{s.room}</td>
-              <td>{s.times}</td>
+          {sections.map((section) => (
+            <tr key={section.secNo}>
+              <td>{section.secNo}</td>
+              <td>{section.courseId}</td>
+              <td>{section.secId}</td>
+              <td>{section.building}</td>
+              <td>{section.room}</td>
+              <td>{section.times}</td>
               <td>
-                <Link to="/assignments" state={s}>
+                <Link 
+                  to="/assignments" 
+                  state={section}
+                >
                   View Assignments
                 </Link>
               </td>
               <td>
-                <Link to="/enrollments" state={s}>
+                <Link 
+                  to="/enrollments" 
+                  state={section}
+                >
                   View Enrollments
                 </Link>
               </td>
