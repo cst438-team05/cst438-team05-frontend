@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { SERVER_URL } from '../../Constants';
 
 // instructor enters students' grades for an assignment
 // fetch the grades using the URL /assignments/{id}/grades
@@ -8,13 +9,112 @@ import React, { useState } from 'react';
 //  <input type="text" name="score" value={g.score} onChange={onChange} />
  
 
-const AssignmentGrade = (props) => {
+function AssignmentGrade({ assignment, onClose }) {
+    const [grades, setGrades] = useState([]);
+    const [message, setMessage] = useState('');
 
- 
-    return(
-        <>
-            <h3>Not implemented</h3>
-        </>          
+    useEffect(() => {
+        fetchGrades();
+    }, [assignment.id]);
+
+    const fetchGrades = () => {
+        fetch(`${SERVER_URL}/assignments/${assignment.id}/grades`)
+            .then(async response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch grades');
+                }
+                return response.json();
+            })
+            .then(data => {
+                setGrades(data);
+                setMessage('');
+            })
+            .catch(() => {
+                setMessage('Error fetching grades');
+            });
+    };
+
+    const handleGradeChange = (gradeId, newScore) => {
+        const updatedGrades = grades.map(grade => 
+            grade.gradeId === gradeId 
+                ? { ...grade, score: newScore } 
+                : grade
+        );
+        setGrades(updatedGrades);
+    };
+
+    const handleSave = (e) => {
+        e.preventDefault();
+        
+        const updatedGrades = grades.map(grade => ({
+            gradeId: grade.gradeId,
+            score: parseInt(grade.score) || 0
+        }));
+
+        fetch(`${SERVER_URL}/grades`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedGrades)
+        })
+        .then(async response => {
+            if (!response.ok) {
+                throw new Error('Failed to save grades');
+            }
+            setMessage('Grades saved successfully');
+            setTimeout(onClose, 1500);
+        })
+        .catch(() => {
+            setMessage('Error saving grades');
+        });
+    };
+
+    return (
+        <div style={{ padding: '20px' }}>
+            <h4>Grade Assignment: {assignment.title}</h4>
+            {message && <p style={{ color: message.includes('Error') ? 'red' : 'green' }}>{message}</p>}
+            
+            <form onSubmit={handleSave}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '20px' }}>
+                    <thead>
+                        <tr>
+                            <th style={{ padding: '10px', textAlign: 'left', borderBottom: '1px solid #ddd' }}>Student Name</th>
+                            <th style={{ padding: '10px', textAlign: 'left', borderBottom: '1px solid #ddd' }}>Email</th>
+                            <th style={{ padding: '10px', textAlign: 'left', borderBottom: '1px solid #ddd' }}>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {grades.length > 0 ? (
+                            grades.map(grade => (
+                                <tr key={grade.gradeId}>
+                                    <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{grade.studentName}</td>
+                                    <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{grade.studentEmail}</td>
+                                    <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            max="100"
+                                            value={grade.score || ''}
+                                            onChange={e => handleGradeChange(grade.gradeId, e.target.value)}
+                                            style={{ width: '60px', padding: '5px' }}
+                                        />
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="3" style={{ padding: '10px', textAlign: 'center' }}>No students enrolled in this section</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+                <div style={{ marginTop: '20px' }}>
+                    <button type="submit" style={{ marginRight: '10px' }}>Save Grades</button>
+                    <button type="button" onClick={onClose}>Cancel</button>
+                </div>
+            </form>
+        </div>
     );
 }
 
