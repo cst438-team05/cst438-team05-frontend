@@ -8,20 +8,38 @@ import TextField from '@mui/material/TextField';
 import {SERVER_URL} from '../../Constants';
 
 const SectionUpdate = (props)  => {
-
     const [open, setOpen] = useState(false);
     const [editMessage, setEditMessage] = useState('');
-    const [section, setSection] = useState(
-        {secNo:'', courseId:'', secId:'', year:'', semester:'', building:'', room:'', times:'',
-        instructorName:'', instructorEmail:'', startDate:'', endDate:''});
+    const [section, setSection] = useState({
+        secNo:'', 
+        courseId:'', 
+        secId:'', 
+        year:'', 
+        semester:'', 
+        building:'', 
+        room:'', 
+        times:'',
+        instructorName:'', 
+        instructorEmail:''
+    });
 
     /*
      *  dialog for edit section
      */
     const editOpen = () => {
         setEditMessage('');
-        setSection({secNo:'', courseId:'', secId:'', year:'', semester:'', building:'', room:'', times:'',
-        instructorName:'', instructorEmail:'', startDate:'', endDate:''});
+        setSection({
+            secNo:'', 
+            courseId:'', 
+            secId:'', 
+            year:'', 
+            semester:'', 
+            building:'', 
+            room:'', 
+            times:'',
+            instructorName:'', 
+            instructorEmail:''
+        });
         setOpen(true);
         setSection(props.section);
     };
@@ -32,88 +50,56 @@ const SectionUpdate = (props)  => {
     };
 
     const editChange = (event) => {
-        setSection({...section,  [event.target.name]:event.target.value})
+        setSection({...section, [event.target.name]:event.target.value})
     }
 
     const onSave = () => {
-        if (!section.startDate || !section.endDate) {
-            setEditMessage('Must enter both start and end dates');
-        } else if (new Date(section.startDate) >= new Date(section.endDate)) {
-            setEditMessage('End date must be after start date');
-        } else {
-            saveSection(section);
-        }
+        saveSection(section);
     }
 
     const saveSection = async (section) => {
         try {
-          const response = await fetch (`${SERVER_URL}/sections`, 
-            {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json',
-              }, 
-              body: JSON.stringify(section),
+            const response = await fetch(`${SERVER_URL}/sections`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(section),
             });
-          if (response.ok) {
-            setEditMessage("section saved");
-          } else {
-            const rc = await response.json();
-            setEditMessage(rc.message);
-          }
+            if (response.ok) {
+                setEditMessage("section saved");
+            } else {
+                const rc = await response.json();
+                setEditMessage(rc.message);
+            }
         } catch (err) {
-          setEditMessage("network error: "+err);
+            setEditMessage("network error: " + err);
         }
-      }
-
+    }
 
     return (
         <div>
-        <Button onClick={editOpen}>Edit</Button>
-        <Dialog open={open} >
-            <DialogTitle>Edit Section</DialogTitle>
-            <DialogContent  style={{paddingTop: 20}} >
-                <h4>{editMessage}</h4>
-                <TextField style={{padding:10}} fullWidth label="secNo" name="secNo" value={section.secNo}  InputProps={{readOnly: true, }}  /> 
-                <TextField style={{padding:10}} fullWidth label="courseId" name="courseId" value={section.courseId} InputProps={{readOnly: true, }}  /> 
-                <TextField style={{padding:10}} fullWidth label="year" name="year" value={section.year} InputProps={{readOnly: true, }} /> 
-                <TextField style={{padding:10}} fullWidth label="semester" name="semester" value={section.semester} InputProps={{readOnly: true, }}  /> 
-                <TextField style={{padding:10}} autoFocus fullWidth label="secId" name="secId" value={section.secId} onChange={editChange} /> 
-                <TextField style={{padding:10}} fullWidth label="building" name="building" value={section.building} onChange={editChange}  /> 
-                <TextField style={{padding:10}} fullWidth label="room" name="room" value={section.room} onChange={editChange}  /> 
-                <TextField style={{padding:10}} fullWidth label="times" name="times" value={section.times} onChange={editChange}  /> 
-                <TextField style={{padding:10}} fullWidth label="instructorEmail" name="instructorEmail" value={section.instructorEmail} onChange={editChange}  />
-                <TextField
-                    style={{padding:10}}
-                    fullWidth
-                    label="Start Date"
-                    name="startDate"
-                    type="date"
-                    value={section.startDate}
-                    onChange={editChange}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                />
-                <TextField
-                    style={{padding:10}}
-                    fullWidth
-                    label="End Date"
-                    name="endDate"
-                    type="date"
-                    value={section.endDate}
-                    onChange={editChange}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                />
-            </DialogContent>
-            <DialogActions>
-                <Button color="secondary" onClick={editClose}>Close</Button>
-                <Button color="primary" onClick={onSave}>Save</Button>
-            </DialogActions>
-        </Dialog> 
-        </div>                       
+            <Button onClick={editOpen}>Edit</Button>
+            <Dialog open={open}>
+                <DialogTitle>Edit Section</DialogTitle>
+                <DialogContent style={{paddingTop: 20}}>
+                    <h4>{editMessage}</h4>
+                    <TextField style={{padding:10}} fullWidth label="secNo" name="secNo" value={section.secNo} InputProps={{readOnly: true}} />
+                    <TextField style={{padding:10}} fullWidth label="courseId" name="courseId" value={section.courseId} InputProps={{readOnly: true}} />
+                    <TextField style={{padding:10}} fullWidth label="year" name="year" value={section.year} InputProps={{readOnly: true}} />
+                    <TextField style={{padding:10}} fullWidth label="semester" name="semester" value={section.semester} InputProps={{readOnly: true}} />
+                    <TextField style={{padding:10}} autoFocus fullWidth label="secId" name="secId" value={section.secId} onChange={editChange} />
+                    <TextField style={{padding:10}} fullWidth label="building" name="building" value={section.building} onChange={editChange} />
+                    <TextField style={{padding:10}} fullWidth label="room" name="room" value={section.room} onChange={editChange} />
+                    <TextField style={{padding:10}} fullWidth label="times" name="times" value={section.times} onChange={editChange} />
+                    <TextField style={{padding:10}} fullWidth label="instructorEmail" name="instructorEmail" value={section.instructorEmail} onChange={editChange} />
+                </DialogContent>
+                <DialogActions>
+                    <Button color="secondary" onClick={editClose}>Close</Button>
+                    <Button color="primary" onClick={onSave}>Save</Button>
+                </DialogActions>
+            </Dialog>
+        </div>
     )
 }
 

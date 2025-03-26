@@ -15,14 +15,32 @@ const SectionAdd = (props)  => {
 
     const [open, setOpen] = useState(false);
     const [editMessage, setEditMessage] = useState('');
-    const [section, setSection] = useState(
-        {secNo:'', courseId:'', secId:'', year:'', semester:'', building:'', room:'', times:'',
-        instructorName:'', instructorEmail:'', startDate:'', endDate:''}
-     );
+    const [section, setSection] = useState({
+        secNo:'', 
+        courseId:'', 
+        secId:'', 
+        year:'', 
+        semester:'', 
+        building:'', 
+        room:'', 
+        times:'',
+        instructorName:'', 
+        instructorEmail:''
+    });
 
     const editOpen = () => {
-        setSection( {secNo:'', courseId:'', secId:'', year:'', semester:'', building:'', room:'', times:'',
-        instructorName:'', instructorEmail:'', startDate:'', endDate:''});
+        setSection({
+            secNo:'', 
+            courseId:'', 
+            secId:'', 
+            year:'', 
+            semester:'', 
+            building:'', 
+            room:'', 
+            times:'',
+            instructorName:'', 
+            instructorEmail:''
+        });
         setEditMessage('');
         setOpen(true);
     };
@@ -33,16 +51,12 @@ const SectionAdd = (props)  => {
     };
 
     const editChange = (event) => {
-        setSection({...section,  [event.target.name]:event.target.value})
+        setSection({...section, [event.target.name]:event.target.value})
     }
 
     const onSave = () => {
-        if (section.courseId==='' || section.secId==='' || section.year==='' || section.semester==='') {
-            setEditMessage('Must enter data for courseId secId, year semester');
-        } else if (!section.startDate || !section.endDate) {
-            setEditMessage('Must enter both start and end dates');
-        } else if (new Date(section.startDate) >= new Date(section.endDate)) {
-            setEditMessage('End date must be after start date');
+        if (section.courseId === '' || section.secId === '' || section.year === '' || section.semester === '') {
+            setEditMessage('Must enter data for courseId, secId, year, semester');
         } else {
             addSection(section);
         }
@@ -50,26 +64,24 @@ const SectionAdd = (props)  => {
 
     const addSection = async (section) => {
         try {
-          const response = await fetch (`${SERVER_URL}/sections`,
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              }, 
-              body: JSON.stringify(section),
+            const response = await fetch(`${SERVER_URL}/sections`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(section),
             });
-          if (response.ok) {
-            const rc = await response.json();
-            setEditMessage("section added secno="+rc.secNo);
-          } else {
-            const rc = await response.json();
-            setEditMessage(rc.message);
-          }
+            if (response.ok) {
+                const rc = await response.json();
+                setEditMessage("section added secno=" + rc.secNo);
+            } else {
+                const rc = await response.json();
+                setEditMessage(rc.message);
+            }
         } catch (err) {
-          setEditMessage("network error: "+err);
+            setEditMessage("network error: " + err);
         }
-      }
-
+    }
 
     return (
       <div>
@@ -86,32 +98,6 @@ const SectionAdd = (props)  => {
               <TextField id="eroom" style={{padding:10}} fullWidth label="room" name="room" value={section.room} onChange={editChange}  /> 
               <TextField id="etimes" style={{padding:10}} fullWidth label="times" name="times" value={section.times} onChange={editChange}  /> 
               <TextField id="einstructorEmail" style={{padding:10}} fullWidth label="instructorEmail" name="instructorEmail" value={section.instructorEmail} onChange={editChange}  />
-              <TextField
-                  id="estartDate"
-                  style={{padding:10}}
-                  fullWidth
-                  label="Start Date"
-                  name="startDate"
-                  type="date"
-                  value={section.startDate}
-                  onChange={editChange}
-                  InputLabelProps={{
-                      shrink: true,
-                  }}
-              />
-              <TextField
-                  id="eendDate"
-                  style={{padding:10}}
-                  fullWidth
-                  label="End Date"
-                  name="endDate"
-                  type="date"
-                  value={section.endDate}
-                  onChange={editChange}
-                  InputLabelProps={{
-                      shrink: true,
-                  }}
-              />
           </DialogContent>
           <DialogActions>
               <Button id="close" color="secondary" onClick={editClose}>Close</Button>

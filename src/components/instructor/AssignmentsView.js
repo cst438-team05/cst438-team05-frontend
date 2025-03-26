@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { SERVER_URL } from '../../Constants';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import AssignmentAdd from './AssignmentAdd';
 import AssignmentUpdate from './AssignmentUpdate';
 import AssignmentGrade from './AssignmentGrade';
@@ -20,70 +20,27 @@ function AssignmentsView() {
     const [showAddForm, setShowAddForm] = useState(false);
     const [showUpdateForm, setShowUpdateForm] = useState(false);
     const [showGradeForm, setShowGradeForm] = useState(false);
-    const [sectionWithDates, setSectionWithDates] = useState(null);
 
     const location = useLocation();
-    const navigate = useNavigate();
     const section = location.state;
-
-    useEffect(() => {
-        if (!section || !section.secNo) {
-            setMessage('No section selected. Please select a section from the Sections page.');
-            return;
-        }
-        console.log('Current section:', section);
-        
-        // Fetch section details
-        fetch(`${SERVER_URL}/sections/${section.secNo}`)
-            .then(async response => {
-                if (!response.ok) {
-                    const text = await response.text();
-                    throw new Error(text || 'Failed to fetch section details');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Fetched section details:', data);
-                // For Spring 2025 (term_id 6)
-                setSectionWithDates({
-                    ...section,
-                    startDate: '2025-01-15',
-                    endDate: '2025-05-15'
-                });
-            })
-            .catch(error => {
-                console.error('Error fetching section details:', error);
-                setMessage('Error: ' + error.message);
-                // Set default dates for Spring 2025
-                setSectionWithDates({
-                    ...section,
-                    startDate: '2025-01-15',
-                    endDate: '2025-05-15'
-                });
-            });
-    }, [section]);
 
     const fetchAssignments = useCallback(() => {
         if (!section?.secNo) {
             return;
         }
-        console.log('Fetching assignments for section:', section.secNo);
 
         fetch(`${SERVER_URL}/sections/${section.secNo}/assignments`)
             .then(async response => {
                 if (!response.ok) {
-                    const text = await response.text();
-                    throw new Error(text || 'Failed to fetch assignments');
+                    throw new Error('Failed to fetch assignments');
                 }
                 return response.json();
             })
             .then(data => {
-                console.log('Fetched assignments:', data);
                 setAssignments(data);
                 setMessage('');
             })
             .catch(error => {
-                console.error('Error fetching assignments:', error);
                 setMessage('Error: ' + error.message);
             });
     }, [section?.secNo]);
@@ -121,7 +78,6 @@ function AssignmentsView() {
 
     const handleGradeClose = () => {
         setShowGradeForm(false);
-        // Refresh assignments after grading
         fetchAssignments();
     };
 
@@ -129,10 +85,6 @@ function AssignmentsView() {
         <div>
             <h3>Assignments for Section {section?.secNo}</h3>
             {message && <p style={{ color: message.includes('Error') ? 'red' : 'green' }}>{message}</p>}
-            
-            {section?.secNo && (
-                <button onClick={() => setShowAddForm(true)}>Add Assignment</button>
-            )}
             
             {assignments.length > 0 ? (
                 <table style={{ marginTop: '20px' }}>
@@ -167,11 +119,13 @@ function AssignmentsView() {
                 <p>No assignments found for this section.</p>
             )}
 
-            {showAddForm && section?.secNo && sectionWithDates && (
+            {section?.secNo && (
+                <button onClick={() => setShowAddForm(true)}>Add Assignment</button>
+            )}
+
+            {showAddForm && section?.secNo && (
                 <AssignmentAdd 
                     secNo={section.secNo}
-                    startDate={sectionWithDates.startDate}
-                    endDate={sectionWithDates.endDate}
                     onClose={() => setShowAddForm(false)}
                     onAssignmentAdded={fetchAssignments}
                 />

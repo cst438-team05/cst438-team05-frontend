@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import { SERVER_URL } from '../../Constants';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 
 // complete the code.  
 // instructor adds an assignment to a section
 // use mui Dialog with assignment fields Title and DueDate
 // issue a POST using URL /assignments to add the assignment
 
-function AssignmentAdd({ secNo, startDate, endDate, onClose, onAssignmentAdded }) {
+function AssignmentAdd({ secNo, onClose, onAssignmentAdded }) {
     const [title, setTitle] = useState('');
     const [dueDate, setDueDate] = useState('');
     const [message, setMessage] = useState('');
@@ -36,24 +42,19 @@ function AssignmentAdd({ secNo, startDate, endDate, onClose, onAssignmentAdded }
             secNo: parseInt(secNo)
         };
 
-        console.log('Sending assignment:', assignment);
-
         fetch(`${SERVER_URL}/assignments`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
             body: JSON.stringify(assignment)
         })
         .then(async response => {
             const text = await response.text();
-            console.log('Response:', text);
             if (!response.ok) {
                 try {
                     const errorData = JSON.parse(text);
-                    if (errorData.message.includes("Due date must be between start and end date")) {
-                        throw new Error("Assignment due date must be within the term dates (Spring 2025: Jan 15 - May 15)");
-                    }
                     throw new Error(errorData.message || 'Failed to add assignment');
                 } catch (e) {
                     throw new Error(text || 'Failed to add assignment');
@@ -67,55 +68,55 @@ function AssignmentAdd({ secNo, startDate, endDate, onClose, onAssignmentAdded }
             setTimeout(onClose, 1500);
         })
         .catch(error => {
-            console.error('Error:', error);
-            setMessage('Error: ' + error.message);
+            setMessage(`Error: ${error.message}`);
         });
     };
 
-    // Get min and max dates for the date input
-    const minDate = startDate || '2025-01-15';
-    const maxDate = endDate || '2025-05-15';
-
     return (
-        <div>
-            <h4>Add New Assignment</h4>
-            {message && <p style={{ color: message.includes('Error') ? 'red' : 'green' }}>{message}</p>}
-            
-            <div>
-                <p>Assignment due date must be within term dates:</p>
-                <ul>
-                    <li>Term Start: {formatDate(minDate)}</li>
-                    <li>Term End: {formatDate(maxDate)}</li>
-                </ul>
-            </div>
-            
+        <Dialog open={true} onClose={onClose}>
+            <DialogTitle>Add New Assignment</DialogTitle>
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Title:</label>
-                    <input 
-                        type="text" 
-                        value={title} 
-                        onChange={e => setTitle(e.target.value)}
+                <DialogContent style={{ paddingTop: 20 }}>
+                    {message && (
+                        <p style={{ 
+                            color: message.includes('Error') ? '#f44336' : '#4caf50',
+                            margin: '0 0 20px 0' 
+                        }}>
+                            {message}
+                        </p>
+                    )}
+                    <TextField
+                        autoFocus
+                        fullWidth
+                        label="Title"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
                         required
+                        margin="dense"
                     />
-                </div>
-                <div>
-                    <label>Due Date:</label>
-                    <input 
-                        type="date" 
+                    <TextField
+                        fullWidth
+                        label="Due Date"
+                        type="date"
                         value={dueDate}
-                        onChange={e => setDueDate(e.target.value)}
-                        min={minDate}
-                        max={maxDate}
+                        onChange={(e) => setDueDate(e.target.value)}
                         required
+                        margin="dense"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                     />
-                </div>
-                <div>
-                    <button type="submit">Add Assignment</button>
-                    <button type="button" onClick={onClose}>Cancel</button>
-                </div>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={onClose} color="secondary">
+                        Cancel
+                    </Button>
+                    <Button type="submit" color="primary">
+                        Add Assignment
+                    </Button>
+                </DialogActions>
             </form>
-        </div>
+        </Dialog>
     );
 }
 
