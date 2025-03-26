@@ -43,7 +43,7 @@ function AssignmentUpdate({ assignment, onClose, onAssignmentUpdated }) {
         };
 
         try {
-            const response = await fetch(`${SERVER_URL}/assignments/${assignment.id}`, {
+            const response = await fetch(`${SERVER_URL}/assignments`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
