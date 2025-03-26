@@ -57,7 +57,7 @@ const Transcript = (props) => {
                             <td style={cellStyle}>{enrollment.secId}</td>
                             <td style={cellStyle}>{enrollment.title}</td>
                             <td style={cellStyle}>{enrollment.credits}</td>
-                            <td style={cellStyle}>{enrollment.grade ?? 'In Progress'}</td>
+                            <td style={cellStyle}>{enrollment.grade ?? ''}</td>
                         </tr>
                     ))}
                 </tbody>
