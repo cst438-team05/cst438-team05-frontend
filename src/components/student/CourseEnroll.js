@@ -85,7 +85,7 @@ const CourseEnroll = (props) => {
                         <td>{s.times}</td>
                         <td>{s.instructorName}</td>
                         <td>{s.instructorEmail}</td>
-                        <td><Button onClick={() => enrollAction(s.secNo)}> Enroll </Button></td>
+                        <td><Button onClick={() => enrollAction(s.secNo)} id={s.secNo}> Enroll </Button></td>
                     </tr>
                 ))}
                 </tbody>
