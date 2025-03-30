@@ -72,6 +72,7 @@ const ScheduleView = (props) => {
             <h4>{message}</h4>
             <div>
                 <TextField
+                    id = "year"
                     label = "Year"
                     name = "year"
                     varian = "standard"
@@ -82,6 +83,7 @@ const ScheduleView = (props) => {
             </div>
             <div>
                 <TextField
+                    id = "semester"
                     label = "Semester"
                     name = "semester"
                     varian = "standard"
@@ -98,13 +100,14 @@ const ScheduleView = (props) => {
                 </thead>
                 <tbody>
                 {schedules.map((s) => (
-                    <tr key = {s.enrollmentId}>
+                    <tr key={s.enrollmentId}>
                         <td>{s.secId}</td>
                         <td>{s.title}</td>
                         <td>{s.credits}</td>
-                        <td><Button onClick = {() => dropCourse(s.enrollmentId)}> Drop Course </Button> </td>
+                        <td style={{display: 'none'}}>{s.secNo}</td>
+                        <td><Button onClick={() => dropCourse(s.enrollmentId)} id={s.secNo}> Drop Course </Button></td>
                     </tr>
-                    ))}
+                ))}
                 </tbody>
             </table>
         </div >
