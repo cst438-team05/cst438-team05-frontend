@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { SERVER_URL } from '../../Constants';
+import Button from '@mui/material/Button';
 
 // instructor view list of students enrolled in a section
 // use location to get section no passed from InstructorSectionsView
@@ -16,6 +17,7 @@ const EnrollmentsView = (props) => {
   const { secNo } = location.state;
 
   const [enrollments, setEnrollments] = useState([]);
+  const [editedEnrollments, setEditedEnrollments] = useState([]);
   const [message, setMessage] = useState('');
 
   const fetchEnrollments = async () => {
@@ -26,6 +28,7 @@ const EnrollmentsView = (props) => {
       if (response.ok) {
         const enrollments = await response.json();
         setEnrollments(enrollments);
+        setEditedEnrollments(JSON.parse(JSON.stringify(enrollments)));
       } else {
         const json = await response.json();
         setMessage('response error: ' + json.message);
@@ -35,17 +38,24 @@ const EnrollmentsView = (props) => {
     }
   };
 
-  const onGradeChange = async () => {
+  const onGradeChange = (index, value) => {
+    const updated = [...editedEnrollments];
+    updated[index].grade = value;
+    setEditedEnrollments(updated);
+  };
+
+  const handleSave = async () => {
     try {
       const response = await fetch(`${SERVER_URL}/enrollments`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(enrollments),
+        body: JSON.stringify(editedEnrollments),
       });
       if (response.ok) {
         fetchEnrollments();
+        setMessage('Grades saved successfully');
       } else {
         const json = await response.json();
         setMessage('response error: ' + json.message);
@@ -53,6 +63,11 @@ const EnrollmentsView = (props) => {
     } catch (err) {
       setMessage('network error: ' + err);
     }
+  };
+
+  const handleCancel = () => {
+    setEditedEnrollments(JSON.parse(JSON.stringify(enrollments)));
+    setMessage('Changes canceled');
   };
 
   useEffect(() => {
@@ -65,36 +80,53 @@ const EnrollmentsView = (props) => {
       <h4>{message}</h4>
       <table className="Center">
         <thead>
-          <tr>
-            <th>Enrollment Id</th>
-            <th>Student Id</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Grade</th>
-          </tr>
+        <tr>
+          <th>Enrollment Id</th>
+          <th>Student Id</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Grade</th>
+        </tr>
         </thead>
         <tbody>
-          {enrollments.map((e) => (
-            <tr key={e.enrollmentId}>
-              <td>{e.enrollmentId}</td>
-              <td>{e.studentId}</td>
-              <td>{e.name}</td>
-              <td>{e.email}</td>
-              <td>
-                <input
-                  type="text"
-                  name="grade"
-                  value={e.grade ?? ''}
-                  onChange={(event) => {
-                    e.grade = event.target.value;
-                    onGradeChange();
-                  }}
-                />
-              </td>
-            </tr>
-          ))}
+        {editedEnrollments.map((e, index) => (
+          <tr key={e.enrollmentId}>
+            <td>{e.enrollmentId}</td>
+            <td>{e.studentId}</td>
+            <td>{e.name}</td>
+            <td>{e.email}</td>
+            <td>
+              <input
+                type="text"
+                name="grade"
+                value={e.grade ?? ''}
+                onChange={(event) => {
+                  onGradeChange(index, event.target.value);
+                }}
+              />
+            </td>
+          </tr>
+        ))}
         </tbody>
       </table>
+      <div style={{ marginTop: '1rem', textAlign: 'center' }}>
+        <Button
+          variant="contained"
+          color="primary"
+          size="small"
+          onClick={handleSave}
+        >
+          Save
+        </Button>
+        <Button
+          variant="contained"
+          color="error"
+          size="small"
+          onClick={handleCancel} style={{ marginLeft: '0.5rem' }}
+        >
+          Cancel
+        </Button>
+      </div>
     </>
   );
 };
