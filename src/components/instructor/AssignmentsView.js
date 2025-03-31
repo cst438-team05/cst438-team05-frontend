@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import AssignmentAdd from './AssignmentAdd';
 import AssignmentUpdate from './AssignmentUpdate';
 import AssignmentGrade from './AssignmentGrade';
+import Button from '@mui/material/Button';
 
 // instructor views assignments for their section
 // use location to get the section value 
@@ -81,35 +82,76 @@ function AssignmentsView() {
         fetchAssignments();
     };
 
+    const containerStyle = {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        marginTop: '20px 0'
+    };
+
+    const tableStyle = {
+        margin: '0 auto',
+        width: '60%',
+        borderCollapse: 'collapse'
+    };
+
+    const cellStyle = {
+        padding: '4px 8px',
+        textAlign: 'left'
+    };
+
     return (
-        <div>
+        <div style={containerStyle}>
             <h3>Assignments for Section {section?.secNo}</h3>
             {message && <p style={{ color: message.includes('Error') ? 'red' : 'green' }}>{message}</p>}
             
             {assignments.length > 0 ? (
-                <table style={{ marginTop: '20px' }}>
+                <table style={tableStyle}>
                     <thead>
                         <tr>
-                            <th>Title</th>
-                            <th>Due Date</th>
-                            <th>Actions</th>
+                            <th style={cellStyle}>Title</th>
+                            <th style={cellStyle}>Due Date</th>
+                            <th style={cellStyle}>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {assignments.map(assignment => (
                             <tr key={assignment.id}>
-                                <td>{assignment.title}</td>
-                                <td>{formatDate(assignment.dueDate)}</td>
-                                <td>
-                                    <button onClick={() => {
+                                <td style={cellStyle}>{assignment.title}</td>
+                                <td style={cellStyle}>{formatDate(assignment.dueDate)}</td>
+                                <td style={cellStyle}>
+                                    <Button
+                                      variant="contained"
+                                      color="secondary"
+                                      size="small"
+                                      onClick={() => {
                                         setSelectedAssignment(assignment);
                                         setShowUpdateForm(true);
-                                    }}>Edit</button>
-                                    <button onClick={() => {
+                                      }}
+                                      style={{ marginRight: '5px' }}
+                                    >
+                                        Edit
+                                    </Button>
+                                    <Button
+                                      variant="contained"
+                                      color="primary"
+                                      size="small"
+                                      onClick={() => {
                                         setSelectedAssignment(assignment);
                                         setShowGradeForm(true);
-                                    }}>Grade</button>
-                                    <button onClick={() => handleDelete(assignment.id)}>Delete</button>
+                                      }}
+                                      style={{ marginRight: '5px' }}
+                                    >
+                                        Grade
+                                    </Button>
+                                    <Button
+                                      variant="contained"
+                                      color="error"
+                                      size="small"
+                                      onClick={() => handleDelete(assignment.id)}
+                                    >
+                                        Delete
+                                    </Button>
                                 </td>
                             </tr>
                         ))}
@@ -120,7 +162,13 @@ function AssignmentsView() {
             )}
 
             {section?.secNo && (
-                <button onClick={() => setShowAddForm(true)}>Add Assignment</button>
+                <Button
+                  variant="contained"
+                  style={{ marginTop: '20px' }}
+                  onClick={() => setShowAddForm(true)}
+                >
+                    Add Assignment
+                </Button>
             )}
 
             {showAddForm && section?.secNo && (

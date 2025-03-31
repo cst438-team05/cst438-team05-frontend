@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { SERVER_URL } from '../../Constants';
+import Button from '@mui/material/Button';
 
 // instructor enters students' grades for an assignment
 // fetch the grades using the URL /assignments/{id}/grades
@@ -110,8 +111,22 @@ function AssignmentGrade({ assignment, onClose }) {
                     </tbody>
                 </table>
                 <div style={{ marginTop: '20px' }}>
-                    <button type="submit" style={{ marginRight: '10px' }}>Save Grades</button>
-                    <button type="button" onClick={onClose}>Cancel</button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      type="submit" style={{ marginRight: '10px' }}
+                    >
+                        Save Grades
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      size="small"
+                      type="button" onClick={onClose}
+                    >
+                        Cancel
+                    </Button>
                 </div>
             </form>
         </div>
