@@ -13,14 +13,8 @@ import Button from '@mui/material/Button';
 
 function AssignmentUpdate({ assignment, onClose, onAssignmentUpdated }) {
     const [title, setTitle] = useState(assignment.title);
-    const [dueDate, setDueDate] = useState(formatDate(assignment.dueDate));
+    const [dueDate, setDueDate] = useState(assignment.dueDate);
     const [message, setMessage] = useState('');
-
-    function formatDate(dateStr) {
-        if (!dateStr) return '';
-        const date = new Date(dateStr);
-        return date.toISOString().split('T')[0];
-    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -38,7 +32,7 @@ function AssignmentUpdate({ assignment, onClose, onAssignmentUpdated }) {
         const updatedAssignment = {
             id: assignment.id,
             title: title.trim(),
-            dueDate: formatDate(dueDate),
+            dueDate,
             secNo: assignment.secNo
         };
 
@@ -67,7 +61,6 @@ function AssignmentUpdate({ assignment, onClose, onAssignmentUpdated }) {
             setTimeout(onClose, 1500);
         } catch (error) {
             setMessage(`Error: ${error.message}`);
-            // console.error('Update error:', error);
         }
     };
 
