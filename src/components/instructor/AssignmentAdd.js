@@ -17,12 +17,6 @@ function AssignmentAdd({ secNo, onClose, onAssignmentAdded }) {
     const [dueDate, setDueDate] = useState('');
     const [message, setMessage] = useState('');
 
-    const formatDate = (dateStr) => {
-        if (!dateStr) return '';
-        const date = new Date(dateStr);
-        return date.toISOString().split('T')[0];
-    };
-
     const handleSubmit = (e) => {
         e.preventDefault();
         
@@ -38,7 +32,7 @@ function AssignmentAdd({ secNo, onClose, onAssignmentAdded }) {
 
         const assignment = {
             title: title.trim(),
-            dueDate: formatDate(dueDate),
+            dueDate,
             secNo: parseInt(secNo)
         };
 
