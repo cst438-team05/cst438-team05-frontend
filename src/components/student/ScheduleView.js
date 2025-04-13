@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Button from '@mui/material/Button';
-import {SERVER_URL} from '../../Constants';
+import {REGISTAR_URL} from '../../Constants';
 import TextField from "@mui/material/TextField";
 
 // student can view schedule of sections 
@@ -24,7 +24,7 @@ const ScheduleView = (props) => {
             return;
         }
         try {
-            const response = await fetch(`${SERVER_URL}/enrollments?studentId=3&year=${year}&semester=${semester}`);
+            const response = await fetch(`${REGISTAR_URL}/enrollments?studentId=3&year=${year}&semester=${semester}`);
             if (response.ok) {
                 const data = await  response.json();
                 setSchedules(data);
@@ -41,7 +41,7 @@ const ScheduleView = (props) => {
     const dropCourse = async (enrollmentId) => {
         try {
             // delete the enrollment
-            const response = await fetch (`${SERVER_URL}/enrollments/${enrollmentId}`,
+            const response = await fetch (`${REGISTAR_URL}/enrollments/${enrollmentId}`,
                 {
                     method: 'DELETE',
                     headers: {

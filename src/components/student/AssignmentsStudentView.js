@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SERVER_URL } from '../../Constants';
+import { GRADEBOOK_URL } from '../../Constants';
 import {
   Button,
   Paper,
@@ -34,7 +34,7 @@ const AssignmentsStudentView = (props) => {
     event.preventDefault();
     try {
       const response = await fetch(
-        `${SERVER_URL}/assignments?studentId=${STUDENT_ID}&year=${year}&semester=${semester}`,
+        `${GRADEBOOK_URL}/assignments?studentId=${STUDENT_ID}&year=${year}&semester=${semester}`,
       );
       if (response.ok) {
         const assignments = await response.json();
