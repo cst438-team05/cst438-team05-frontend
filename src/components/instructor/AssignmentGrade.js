@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SERVER_URL } from '../../Constants';
+import { GRADEBOOK_URL } from '../../Constants';
 import Button from '@mui/material/Button';
 
 // instructor enters students' grades for an assignment
@@ -19,7 +19,7 @@ function AssignmentGrade({ assignment, onClose }) {
     }, [assignment.id]);
 
     const fetchGrades = () => {
-        fetch(`${SERVER_URL}/assignments/${assignment.id}/grades`)
+        fetch(`${GRADEBOOK_URL}/assignments/${assignment.id}/grades`)
             .then(async response => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch grades');
@@ -52,7 +52,7 @@ function AssignmentGrade({ assignment, onClose }) {
             score: parseInt(grade.score) || 0
         }));
 
-        fetch(`${SERVER_URL}/grades`, {
+        fetch(`${GRADEBOOK_URL}/grades`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

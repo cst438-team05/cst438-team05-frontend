@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { REGISTAR_URL } from '../../Constants';
 
 // students gets a list of all courses taken and grades
 // use the URL /transcripts?studentId=
@@ -14,7 +15,7 @@ const Transcript = (props) => {
 
     // Fetch data from the REST API
     useEffect(() => {
-        fetch(`http://localhost:8080/transcripts?studentId=${studentId}`)
+        fetch(`${REGISTAR_URL}/transcripts?studentId=${studentId}`)
             .then(response => response.json())
             // Set the data to the transcript state variable
             .then(data => { setTranscript(data); })

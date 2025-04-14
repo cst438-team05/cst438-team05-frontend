@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { SERVER_URL } from '../../Constants';
+import { GRADEBOOK_URL } from '../../Constants';
 import { useLocation } from 'react-router-dom';
 import AssignmentAdd from './AssignmentAdd';
 import AssignmentUpdate from './AssignmentUpdate';
@@ -30,7 +30,7 @@ function AssignmentsView() {
             return;
         }
 
-        fetch(`${SERVER_URL}/sections/${section.secNo}/assignments`)
+        fetch(`${GRADEBOOK_URL}/sections/${section.secNo}/assignments`)
             .then(async response => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch assignments');
@@ -51,7 +51,7 @@ function AssignmentsView() {
     }, [fetchAssignments]);
 
     const handleDelete = (assignmentId) => {
-        fetch(`${SERVER_URL}/assignments/${assignmentId}`, {
+        fetch(`${GRADEBOOK_URL}/assignments/${assignmentId}`, {
             method: 'DELETE',
         })
             .then(response => {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SERVER_URL } from '../../Constants';
+import { GRADEBOOK_URL } from '../../Constants';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -37,7 +37,7 @@ function AssignmentUpdate({ assignment, onClose, onAssignmentUpdated }) {
         };
 
         try {
-            const response = await fetch(`${SERVER_URL}/assignments`, {
+            const response = await fetch(`${GRADEBOOK_URL}/assignments`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

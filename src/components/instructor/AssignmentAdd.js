@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SERVER_URL } from '../../Constants';
+import { GRADEBOOK_URL } from '../../Constants';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -36,7 +36,7 @@ function AssignmentAdd({ secNo, onClose, onAssignmentAdded }) {
             secNo: parseInt(secNo)
         };
 
-        fetch(`${SERVER_URL}/assignments`, {
+        fetch(`${GRADEBOOK_URL}/assignments`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
