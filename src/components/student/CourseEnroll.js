@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Button from "@mui/material/Button";
-import {REGISTAR_URL} from '../../Constants';
+import {REGISTRAR_URL} from '../../Constants';
 
 // students displays a list of open sections for a
 // use the URL /sections/open
@@ -16,7 +16,7 @@ const CourseEnroll = (props) => {
 
     const fetchSections = async () => {
         try {
-            const response = await fetch(`${REGISTAR_URL}/sections/open`);
+            const response = await fetch(`${REGISTRAR_URL}/sections/open`);
 
             if (response.ok){
                 const sections = await response.json();
@@ -33,7 +33,7 @@ const CourseEnroll = (props) => {
 
     const enrollAction = async (secNo) => {
         try {
-            const response = await fetch (`${REGISTAR_URL}/enrollments/sections/${secNo}?studentId=3`,
+            const response = await fetch (`${REGISTRAR_URL}/enrollments/sections/${secNo}?studentId=3`,
                 {
                     method: 'POST'
                 });

@@ -5,7 +5,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import {REGISTAR_URL} from '../../Constants';
+import {REGISTRAR_URL} from '../../Constants';
 
 const SectionUpdate = (props)  => {
     const [open, setOpen] = useState(false);
@@ -59,7 +59,7 @@ const SectionUpdate = (props)  => {
 
     const saveSection = async (section) => {
         try {
-            const response = await fetch(`${REGISTAR_URL}/sections`, {
+            const response = await fetch(`${REGISTRAR_URL}/sections`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
