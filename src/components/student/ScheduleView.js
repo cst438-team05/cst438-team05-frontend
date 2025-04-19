@@ -2,11 +2,11 @@ import React, {useEffect, useState} from 'react';
 import Button from '@mui/material/Button';
 import {SERVER_URL} from '../../Constants';
 import TextField from "@mui/material/TextField";
+import { getAuthHeader } from '../../auth/getAuthHeader';
 
 // student can view schedule of sections 
-// use the URL /enrollments?studentId=3&year= &semester=
+// use the URL /enrollments?year= &semester=
 // The REST api returns a list of EnrollmentDTO objects
-// studentId=3 will be removed in assignment 7
 
 // to drop a course 
 // issue a DELETE with URL /enrollments/{enrollmentId}
@@ -24,7 +24,12 @@ const ScheduleView = (props) => {
             return;
         }
         try {
-            const response = await fetch(`${SERVER_URL}/enrollments?studentId=3&year=${year}&semester=${semester}`);
+            const response = await fetch(`${SERVER_URL}/enrollments?year=${year}&semester=${semester}`, {
+                method: 'GET',
+                headers: {
+                    ...getAuthHeader(),
+                }
+            });
             if (response.ok) {
                 const data = await  response.json();
                 setSchedules(data);
@@ -46,6 +51,7 @@ const ScheduleView = (props) => {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
+                        ...getAuthHeader(),
                     },
                 });
             if (response.ok) {

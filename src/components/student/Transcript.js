@@ -1,7 +1,9 @@
 import React, {useState, useEffect} from 'react';
+import { getAuthHeader } from '../../auth/getAuthHeader';
+import { SERVER_URL } from '../../Constants';
 
 // students gets a list of all courses taken and grades
-// use the URL /transcripts?studentId=
+// use the URL /transcripts
 // the REST api returns a list of EnrollmentDTO objects 
 // the table should have columns for 
 //  Year, Semester, CourseId, SectionId, Title, Credits, Grade
@@ -9,17 +11,19 @@ import React, {useState, useEffect} from 'react';
 const Transcript = (props) => {
     // Empty array state variable to hold transcript data
     const [transcript, setTranscript] = useState([]);
-    // Hard coded studentId for now, later this will come from authentication
-    const studentId = 3;
 
     // Fetch data from the REST API
     useEffect(() => {
-        fetch(`http://localhost:8080/transcripts?studentId=${studentId}`)
+        fetch(`${SERVER_URL}/transcripts`, {
+            headers: {
+                ...getAuthHeader(),
+            }
+        })
             .then(response => response.json())
             // Set the data to the transcript state variable
             .then(data => { setTranscript(data); })
             .catch(error => console.error('Error fetching transcript data: ', error));
-    }, [studentId]); // If studentId changes, fetch data again
+    }, []);
 
     const tableStyle = {
         margin: "auto",
