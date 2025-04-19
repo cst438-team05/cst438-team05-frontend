@@ -11,13 +11,11 @@ import {
   TableRow,
   TextField,
 } from '@mui/material';
+import { getAuthHeader } from '../../auth/getAuthHeader';
 
 // student views a list of assignments and assignment grades
-// use the URL  /assignments?studentId= &year= &semester=
+// use the URL  /assignments?year= &semester=
 // The REST api returns a list of SectionDTO objects
-// Use a value of studentId=3 for now. Until login is implemented in assignment 7.
-
-const STUDENT_ID = 3;
 
 // display a table with columns  Course Id, Assignment Title, Assignment DueDate, Score
 
@@ -34,7 +32,13 @@ const AssignmentsStudentView = (props) => {
     event.preventDefault();
     try {
       const response = await fetch(
-        `${SERVER_URL}/assignments?studentId=${STUDENT_ID}&year=${year}&semester=${semester}`,
+        `${SERVER_URL}/assignments?year=${year}&semester=${semester}`,
+        {
+          method: 'GET',
+          headers: {
+            ...getAuthHeader(),
+          },
+        },
       );
       if (response.ok) {
         const assignments = await response.json();

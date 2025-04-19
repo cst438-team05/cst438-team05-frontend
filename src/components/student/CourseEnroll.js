@@ -1,14 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import Button from "@mui/material/Button";
 import {SERVER_URL} from '../../Constants';
+import { getAuthHeader } from '../../auth/getAuthHeader';
 
 // students displays a list of open sections for a
 // use the URL /sections/open
 // the REST api returns a list of SectionDTO objects
 
 // the student can select a section and enroll
-// issue a POST with the URL /enrollments/sections/{secNo}?studentId=3
-// studentId=3 will be removed in assignment 7.
+// issue a POST with the URL /enrollments/sections/{secNo}
 
 const CourseEnroll = (props) => {
     const [sections, setSections] = useState([]);
@@ -16,7 +16,11 @@ const CourseEnroll = (props) => {
 
     const fetchSections = async () => {
         try {
-            const response = await fetch(`${SERVER_URL}/sections/open`);
+            const response = await fetch(`${SERVER_URL}/sections/open`, {
+                headers: {
+                    ...getAuthHeader(),
+                }
+            });
 
             if (response.ok){
                 const sections = await response.json();
@@ -33,9 +37,13 @@ const CourseEnroll = (props) => {
 
     const enrollAction = async (secNo) => {
         try {
-            const response = await fetch (`${SERVER_URL}/enrollments/sections/${secNo}?studentId=3`,
+            const response = await fetch (`${SERVER_URL}/enrollments/sections/${secNo}`,
                 {
-                    method: 'POST'
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...getAuthHeader(),
+                    },
                 });
             if (response.ok) {
                 setMessage(`Successfully enrolled in the section: ${secNo}`);
