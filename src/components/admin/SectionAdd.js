@@ -6,6 +6,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import {SERVER_URL} from '../../Constants';
+import { getAuthHeader } from '../../auth/getAuthHeader';
 
 /*
  * Dialog for edit a section
@@ -68,6 +69,7 @@ const SectionAdd = (props)  => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    ...getAuthHeader()
                 },
                 body: JSON.stringify(section),
             });

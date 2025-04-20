@@ -6,6 +6,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import {SERVER_URL} from '../../Constants';
+import { getAuthHeader } from '../../auth/getAuthHeader';
 
 const SectionUpdate = (props)  => {
     const [open, setOpen] = useState(false);
@@ -63,6 +64,7 @@ const SectionUpdate = (props)  => {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    ...getAuthHeader()
                 },
                 body: JSON.stringify(section),
             });

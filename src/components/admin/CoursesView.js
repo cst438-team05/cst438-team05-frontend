@@ -5,6 +5,7 @@ import CourseUpdate from './CourseUpdate';
 import CourseAdd from './CourseAdd';
 import Button from '@mui/material/Button';
 import {SERVER_URL} from '../../Constants';
+import { getAuthHeader } from '../../auth/getAuthHeader';
 
 function CoursesView(props) {
     const headers = ['CourseId', 'Title', 'Credits',  '', ''];
@@ -15,7 +16,11 @@ function CoursesView(props) {
 
     const  fetchCourses = async () => {
       try {
-        const response = await fetch(`${SERVER_URL}/courses`);
+        const response = await fetch(`${SERVER_URL}/courses`,{
+          headers: {
+            ...getAuthHeader()
+          }
+        });
         if (response.ok) {
           const courses = await response.json();
           setCourses(courses);
@@ -39,6 +44,7 @@ function CoursesView(props) {
               method: 'PUT',
               headers: {
                 'Content-Type': 'application/json',
+                ...getAuthHeader()
               }, 
               body: JSON.stringify(course),
             });
@@ -61,6 +67,7 @@ function CoursesView(props) {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
+                ...getAuthHeader()
               }, 
               body: JSON.stringify(course),
             });
@@ -83,6 +90,7 @@ function CoursesView(props) {
               method: 'DELETE',
               headers: {
                 'Content-Type': 'application/json',
+                ...getAuthHeader()
               }, 
             });
         if (response.ok) {

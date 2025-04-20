@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { SERVER_URL } from '../../Constants';
 import Button from '@mui/material/Button';
+import { getAuthHeader } from '../../auth/getAuthHeader';
 
 // instructor enters students' grades for an assignment
 // fetch the grades using the URL /assignments/{id}/grades
@@ -19,7 +20,11 @@ function AssignmentGrade({ assignment, onClose }) {
     }, [assignment.id]);
 
     const fetchGrades = () => {
-        fetch(`${SERVER_URL}/assignments/${assignment.id}/grades`)
+        fetch(`${SERVER_URL}/assignments/${assignment.id}/grades`, {
+            headers: {
+                ...getAuthHeader()
+            }
+        })
             .then(async response => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch grades');
@@ -56,6 +61,7 @@ function AssignmentGrade({ assignment, onClose }) {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
+                ...getAuthHeader()
             },
             body: JSON.stringify(updatedGrades)
         })

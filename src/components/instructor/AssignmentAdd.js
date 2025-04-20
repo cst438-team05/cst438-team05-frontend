@@ -6,6 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import { getAuthHeader } from '../../auth/getAuthHeader';
 
 // complete the code.  
 // instructor adds an assignment to a section
@@ -40,7 +41,8 @@ function AssignmentAdd({ secNo, onClose, onAssignmentAdded }) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                ...getAuthHeader()
             },
             body: JSON.stringify(assignment)
         })
