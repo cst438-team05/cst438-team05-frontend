@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { SERVER_URL } from '../../Constants';
+import { getAuthHeader } from '../../auth/getAuthHeader';
 
 // instructor views a list of sections they are teaching
 // use the URL /sections?email=dwisneski@csumb.edu&year= &semester=
@@ -11,8 +12,6 @@ import { SERVER_URL } from '../../Constants';
 // hint:
 // <Link to="/enrollments" state={section}>View Enrollments</Link>
 // <Link to="/assignments" state={section}>View Assignments</Link>
-
-const INSTRUCTOR_EMAIL = 'dwisneski@csumb.edu';
 
 const InstructorSectionsView = (props) => {
   const location = useLocation();
@@ -27,10 +26,14 @@ const InstructorSectionsView = (props) => {
       return;
     }
     try {
-      const url = `${SERVER_URL}/sections?email=${INSTRUCTOR_EMAIL}&year=${year}&semester=${semester}`;
+      const url = `${SERVER_URL}/sections?year=${year}&semester=${semester}`;
       let response;
       try {
-        response = await fetch(url);
+        response = await fetch(url, {
+          headers: {
+            ...getAuthHeader()
+          }
+        });
       } catch (networkError) {
         throw new Error('Cannot connect to backend server - is it running?');
       }

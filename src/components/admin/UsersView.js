@@ -5,6 +5,7 @@ import UserUpdate from './UserUpdate';
 import UserAdd from './UserAdd';
 import Button from '@mui/material/Button';
 import {SERVER_URL} from '../../Constants';
+import { getAuthHeader } from '../../auth/getAuthHeader';
 
 function UsersView(props) {
     const headers = ['ID', 'Name', 'Email', 'Type', '', ''];
@@ -15,7 +16,11 @@ function UsersView(props) {
 
     const  fetchUsers = async () => {
       try {
-        const response = await fetch(`${SERVER_URL}/users`);
+        const response = await fetch(`${SERVER_URL}/users`, {
+          headers: {
+            ...getAuthHeader()
+          }
+      });
         if (response.ok) {
           const users = await response.json();
           setUsers(users);
@@ -39,6 +44,7 @@ function UsersView(props) {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
+              ...getAuthHeader()
             }, 
             body: JSON.stringify(user),
           });
@@ -61,6 +67,7 @@ function UsersView(props) {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
+              ...getAuthHeader()
             }, 
             body: JSON.stringify(user),
           });
@@ -84,6 +91,7 @@ function UsersView(props) {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',
+              ...getAuthHeader()
             }, 
           });
         if (response.ok) {

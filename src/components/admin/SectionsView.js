@@ -5,6 +5,7 @@ import SectionUpdate from './SectionUpdate';
 import SectionAdd from './SectionAdd';
 import Button from '@mui/material/Button';
 import {SERVER_URL} from '../../Constants';
+import { getAuthHeader } from '../../auth/getAuthHeader';
 
 function SectionsView(props) {
     const headers = ['SecNo', 'CourseId', 'SecId',  'Year', 'Semester', 'Building', 'Room', 'Times', '', ''];
@@ -20,7 +21,12 @@ function SectionsView(props) {
             setMessage("Enter search parameters");
         } else {
           try {
-            const response = await fetch(`${SERVER_URL}/courses/${search.courseId}/sections?year=${search.year}&semester=${search.semester}`);
+            const response = await fetch(`${SERVER_URL}/courses/${search.courseId}/sections?year=${search.year}&semester=${search.semester}`, {
+                headers: {
+                  ...getAuthHeader()
+                }
+              }
+            );
             if (response.ok) {
               const data = await response.json();
               setSections(data);
@@ -41,7 +47,8 @@ function SectionsView(props) {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
-          }, 
+            ...getAuthHeader()
+          },
         });
         if (response.ok) {
           setMessage("Section deleted");

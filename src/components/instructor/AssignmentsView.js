@@ -5,6 +5,7 @@ import AssignmentAdd from './AssignmentAdd';
 import AssignmentUpdate from './AssignmentUpdate';
 import AssignmentGrade from './AssignmentGrade';
 import Button from '@mui/material/Button';
+import { getAuthHeader } from '../../auth/getAuthHeader';
 
 // instructor views assignments for their section
 // use location to get the section value 
@@ -30,7 +31,11 @@ function AssignmentsView() {
             return;
         }
 
-        fetch(`${SERVER_URL}/sections/${section.secNo}/assignments`)
+        fetch(`${SERVER_URL}/sections/${section.secNo}/assignments`, {
+            headers: {
+                ...getAuthHeader()
+            }
+        })
             .then(async response => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch assignments');
@@ -53,6 +58,9 @@ function AssignmentsView() {
     const handleDelete = (assignmentId) => {
         fetch(`${SERVER_URL}/assignments/${assignmentId}`, {
             method: 'DELETE',
+            headers: {
+                ...getAuthHeader()
+            }
         })
             .then(response => {
                 if (response.ok) {

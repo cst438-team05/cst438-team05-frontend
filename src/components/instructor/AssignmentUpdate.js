@@ -6,6 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import { getAuthHeader } from '../../auth/getAuthHeader';
 
 //  instructor updates assignment title, dueDate 
 //  use an mui Dialog
@@ -41,7 +42,8 @@ function AssignmentUpdate({ assignment, onClose, onAssignmentUpdated }) {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json'
+                    'Accept': 'application/json',
+                    ...getAuthHeader()
                 },
                 body: JSON.stringify(updatedAssignment)
             });
